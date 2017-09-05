@@ -59,3 +59,22 @@ RUN echo y | android update sdk \
     --force \
     --all \
     --filter "${GOOGLE_COMPONENTS}"
+
+# SDK licenses agreements
+RUN mkdir "$ANDROID_HOME/licenses" || true
+
+# I'll commented the following lines for two reasons:
+    # 1. I want that usere are awere that they have to aggree to licenses
+    # 2. The licence texts and so the hash valus could change, so hardcoded is not the best option
+    # => mounting the licens is imo the best solution
+
+# @see https://stackoverflow.com/a/38381577
+# RUN mkdir "$ANDROID_HOME/licenses" || true && \
+#     echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license" && \
+#     echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+# EXPECT MOUNT folder "licenses" to "/usr/local/android-sdk-linux/licenses"
+
+# todo:
+# maybe try out a symlink approach, so a user can just mount to something like /andoird-licenses
+# and don't have to know the $ANDROID_HOME path
