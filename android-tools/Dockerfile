@@ -36,3 +36,26 @@ RUN cd /usr/local && \
     chgrp -R users $ANDROID_HOME && \
     chmod -R 0775 $ANDROID_HOME && \
     rm $ANDROID_SDK_FILE
+
+#
+# Install android tools and system-image
+#
+
+# set global env PATH for the android-tools
+ENV PATH $PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.1
+
+# install android components / sys-img
+ENV ANDROID_COMPONENTS platform-tools,build-tools-23.0.1,android-23,extra-android-support,sys-img-x86_64-android-23
+RUN echo y | android update sdk \
+    --no-ui \
+    --force \
+    --all \
+    --filter "${ANDROID_COMPONENTS}" 
+
+# install google components
+ENV GOOGLE_COMPONENTS extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services
+RUN echo y | android update sdk \
+    --no-ui \
+    --force \
+    --all \
+    --filter "${GOOGLE_COMPONENTS}"
