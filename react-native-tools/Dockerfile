@@ -82,3 +82,22 @@ RUN set -ex \
 #
 #
 #
+
+# ===== ===== START react-native cli installation ===== =====
+ENV REACT_NATIVE_CLI_VERSION 2.0.1
+
+RUN npm install -g react-native-cli@$REACT_NATIVE_CLI_VERSION
+
+# Clean up when done.
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    npm cache clear
+
+# Default react-native web server port
+EXPOSE 8081
+
+# ===== ===== END react-native cli Installation ===== =====
+
+#
+#
+#
