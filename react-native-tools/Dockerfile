@@ -95,6 +95,7 @@ RUN apt-get clean && \
 
 # Default react-native web server port
 EXPOSE 8081
+#OPTIONAL ARGUMENT "-p 8081:8081"
 
 # ===== ===== END react-native cli Installation ===== =====
 
