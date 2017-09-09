@@ -2,7 +2,7 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
-/** ========== custome code ========== */
+/** ========== start custome code ========== */
 import groovy.json.JsonSlurper
 
 def getVersionNameFromPkgJson() {
@@ -13,10 +13,16 @@ def getVersionNameFromPkgJson() {
 def getVersionCodeFromPkgJson() {
     def inputFile = new File("../package.json")
     def packageJson = new JsonSlurper().parseText(inputFile.text)
-    def (major, minor, patch) = packageJson.tokenize( '.' )
-    int imajor = major as Integer
-    int iminor = minor as Integer
-    int ipatch = patch as Integer
+    //def (major, minor, patch) = packageJson.tokenize( '.' )
+    def version = packageJson["version"]
+    def versionList = version.tokenize( '.' )
+    //file3[0]
+    // int imajor = major as Integer
+    // int iminor = minor as Integer
+    // int ipatch = patch as Integer
+    int imajor = versionList[0] as Integer
+    int iminor = versionList[1] as Integer
+    int ipatch = versionList[2] as Integer
     int versionCode = imajor * 1000 + iminor * 100 + ipatch
     return versionCode
 }
@@ -27,7 +33,7 @@ def getGitVersion() {
     return process.text.toInteger()
 }
 */
-/** ========== custome code ========== */
+/** ========== end custome code ========== */
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -116,10 +122,10 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
-/** custom */
+/** start custom */
 def pkgVersionName = getVersionNameFromPkgJson()
 def pkgVersionCode = getVersionCodeFromPkgJson()
-/** custom */
+/** end custom */
 
 android {
     compileSdkVersion 23
@@ -131,12 +137,24 @@ android {
         targetSdkVersion 22
         //versionCode 1
         //versionName "1.0"
-        versionCode pkgVersionCode
-        versionName pkgVersionName
+        versionCode pkgVersionCode //custom
+        versionName pkgVersionName //custom
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+    /** start custom */
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+    /** end custom */
     splits {
         abi {
             reset()
@@ -149,6 +167,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release

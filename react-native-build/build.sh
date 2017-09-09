@@ -29,12 +29,6 @@ fi
 echo "the apk-signing material is mounted"
 echo ""
 
-#
-#todo: check for *.keystore file and gradle.properties file
-#differ dev/production
-#handle package sign stuff
-#
-
 if [ ! -e package.json ]
 then
     echo "no package.json found"
@@ -69,9 +63,21 @@ echo ""
 react-native eject
 echo ""
 
+#
+#todo: check for *.keystore file and gradle.properties file
+#differ dev/production
+#handle package sign stuff
+#
+echo "start copy kestore file"
+KEYSTORE_FILE=$(find /apk-signing/ -type f | grep -i keystore$)
+cp $KEYSTORE_FILE ./android/app/
+yes | cp -rf /apk-signing/gradle.properties ./android
+echo "end copy kestore file"
+echo ""
+
 #handle apk-versioning related tasks
 echo "handle apk-versioning"
-cp -Rf /build/overwrite/apk-versioning/android/ /temp/android/
+cp -Rf /build/overwrite/apk-versioning/android/. /temp/android/
 echo ""
 
 #link native components
