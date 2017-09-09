@@ -13,4 +13,6 @@ cd /temp
 
 #check for package.json, android/ios/node_modules folder
 
+bash /build/scripts/clean.sh
+
 
