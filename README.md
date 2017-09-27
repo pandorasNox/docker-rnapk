@@ -6,23 +6,23 @@ This project aims to provide you with a command line tool based on Docker to bui
 ## Motivation
 ### Backstory
 <details>
-  <summary>Show the Backstory</summary>
+<summary>Show the Backstory</summary>
 
-    With "Creat React Native App" (CRNA) there exist an awesome tool for getting started with React Native. If you play with the thought to check out React Native you should definitly check out CRNA.
+With "Creat React Native App" (CRNA) there exist an awesome tool for getting started with React Native. If you play with the thought to check out React Native you should definitly check out CRNA.
 
-    But "Creat React Native App" has limitations:
-    - for development only
-    - creats project which are in a kind of pre React Native state (in a context for production)
-    - it must be written in pure JavaScript
-        - you can’t have any dependencies which rely on custom native code (which means you can't use native custome components)
-    - you have to installed the expo app on a mobile device (or simulator) to show/play around with your app
-    - devices (running the expo app) needs to be in the same network as the host (who runs a packeging server which streamlinse the JS package to the expo app)
-        - sharing your app becomes way harder
+But "Creat React Native App" has limitations:
+- for development only
+- creats project which are in a kind of pre React Native state (in a context for production)
+- it must be written in pure JavaScript
+    - you can’t have any dependencies which rely on custom native code (which means you can't use native custome components)
+- you have to installed the expo app on a mobile device (or simulator) to show/play around with your app
+- devices (running the expo app) needs to be in the same network as the host (who runs a packeging server which streamlinse the JS package to the expo app)
+    - sharing your app becomes way harder
 
-    At some point you want to distribute your app to coworkers, friends, or customers.
-    New developers who just startet with CRNA should also make a similar experience if it goes to production.
+At some point you want to distribute your app to coworkers, friends, or customers.
+New developers who just startet with CRNA should also make a similar experience if it goes to production.
 
-    Here docker-rnapk joins the game.
+Here docker-rnapk joins the game.
 </details>
 
 ### Goals
