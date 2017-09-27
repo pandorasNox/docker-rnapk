@@ -4,7 +4,6 @@
     # - the openjdk
     # - the android sdk
 
-
 # strongly inspired by
 # - https://github.com/banianhost/docker-android/blob/master/Dockerfile
 #     (https://github.com/banianhost/docker-android/blob/0fcfbb6bbf730d11c111ed9e7dd8d0eea091b790/Dockerfile)
@@ -22,6 +21,7 @@ ENV ANDROID_HOME /usr/local/android-sdk-linux
 # disable interactive mode
 ENV DEBIAN_FRONTEND noninteractive
 
+# what happens here I didn't figured out completly yet (why do we need all this)
 RUN dpkg --add-architecture i386 && \
     apt-get update -q && \
     apt-get install -y git && \
@@ -30,6 +30,10 @@ RUN dpkg --add-architecture i386 && \
 
 # Install kvm support for Android emulator
 #RUN apt-get install -qy --no-install-recommends qemu-kvm libvirt-bin libegl1-mesa
+
+#
+#
+#
 
 # Download and untar (install) Android SDK
 RUN cd /usr/local && \
@@ -47,44 +51,34 @@ RUN cd /usr/local && \
 # set global env PATH for the android-tools
 ENV PATH $PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.1
 
+# create SDK licenses agreements directory
+RUN mkdir "$ANDROID_HOME/licenses" || true
+
 # install android components / sys-img
-ENV ANDROID_COMPONENTS platform-tools,build-tools-23.0.1,android-23,extra-android-support,sys-img-x86_64-android-23
-RUN echo y | android update sdk \
+ENV ANDROID_COMPONENTS platform-tools,build-tools-23.0.1,android-23,extra-android-support,sys-img-x86_64-android-23,extra-android-m2repository
+RUN (while sleep 3; do echo "y"; done) | android update sdk \
     --no-ui \
     --force \
     --all \
     --filter "${ANDROID_COMPONENTS}"
 
-#todo: try the following:
-#   (while sleep 3; do echo "y"; done) | $ANDROID_HOME/tools/android update sdk -u
-
 # install google components
-ENV GOOGLE_COMPONENTS extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services
-RUN echo y | android update sdk \
-    --no-ui \
-    --force \
-    --all \
-    --filter "${GOOGLE_COMPONENTS}"
+# ENV GOOGLE_COMPONENTS extra-google-m2repository,extra-google-google_play_services
+# RUN (while sleep 3; do echo "y"; done) | android update sdk \
+#     --no-ui \
+#     --force \
+#     --all \
+#     --filter "${GOOGLE_COMPONENTS}"
 
-# SDK licenses agreements
-RUN mkdir "$ANDROID_HOME/licenses" || true
+# alternativly install just all updates, images sizes are close to each other (5.25 GB to 5.5 GB)
+#(while sleep 3; do echo "y"; done) | $ANDROID_HOME/tools/android update sdk -u
+
+#
+#
+#
 
 # Tell gradle to store dependencies in a sub directory of the android project
 # this persists the dependencies between builds
-ENV GRADLE_USER_HOME /temp/gradle_deps
+ENV GRADLE_USER_HOME /gradle_deps
 
-# I'll commented the following lines for two reasons:
-    # 1. I want that usere are awere that they have to aggree to licenses
-    # 2. The licence texts and so the hash valus could change, so hardcoded is not the best option
-    # => mounting the licens is imo the best solution
-
-# @see https://stackoverflow.com/a/38381577
-# RUN mkdir "$ANDROID_HOME/licenses" || true && \
-#     echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license" && \
-#     echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-
-# EXPECT MOUNT folder "licenses" to "/usr/local/android-sdk-linux/licenses"
-
-# todo:
-# maybe try out a symlink approach, so a user can just mount to something like /andoird-licenses
-# and don't have to know the $ANDROID_HOME path
+# OPTIONAL MOUNT folder to "/gradle_deps"

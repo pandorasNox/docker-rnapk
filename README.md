@@ -32,6 +32,29 @@ Here docker-rnapk joins the game.
 - be as transparent as possible to understand the deployment/building process
 
 ## Get started
+
+### build the docker images
+Before you can use this tool you have to create all needed docker images for that purpose.
+
+> Be awere that creating these docker images automatically accepts all kinds of license agreements, it's by the way never a good idea to run any foreign scripts / creating docker images without checking whats happen in there
+
+Its recommended to use the provided init.sh file in this repository.
+
+`bash init.sh` or `./init.sh` after given execution rights to the file
+
+Running this commands creates three images
+- android-tools
+- react-native-tools
+- react-native-build
+
+> the names of the images counts because react-native-build extends react-native-tools and this extends android-tools and
+
+Of course you can create each image manually by running:
+`docker build -t android-tools ./android-tools`
+`docker build -t react-native-tools ./react-native-tools`
+`docker build -t react-native-build ./react-native-build`
+
+### 
 coming soon
 
 ## example usage
@@ -48,16 +71,17 @@ coming soon
 | Required | What                                | Argument/Example                                                  |
 |----------|-------------------------------------|-------------------------------------------------------------------|
 | yes      | project directory path              | -v $(pwd):/temp                                                   |
-| yes      | android-licenses directory path     | -v /path/to/androidLicenses:/usr/local/android-sdk-linux/licenses |
 | yes      | apk-signing material directory path | -v /some/path:/apk-signing                                        |
-| no       | gradle_deps directory path          | -v $(pwd)/../gradle_deps:/temp/gradle_deps                        |
+| no       | gradle_deps directory path          | -v /some/path:/gradle_deps                                        |
 
 
 ## Testet with the following versions
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.45.1",
+| React             | React Native         |
+|-------------------|----------------------|
+| "16.0.0-alpha.12" | "0.45.1"             |
+
 
 ## Todo
 - integrate fastlane (optional)
   - https://github.com/appfoundry/fastlane-android-example
-- add a versioning script (so you ca adat the apk versionng)
+- add a versioning script (so you can overwrite the current apk versioning)
