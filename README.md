@@ -31,8 +31,17 @@ Here docker-rnapk joins the game.
 - provide a starting point for CI tools
 - be as transparent as possible to understand the deployment/building process
 
+## Get started
+coming soon
+
 ## example usage
 `docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing -v $(pwd)/../android-licenses:/usr/local/android-sdk-linux/licenses react-native-build`
+
+## How to build signed apk file
+### requirements
+coming soon
+### usage
+coming soon
 
 ## container arguments
 
@@ -41,12 +50,7 @@ Here docker-rnapk joins the game.
 | yes      | project directory path              | -v $(pwd):/temp                                                   |
 | yes      | android-licenses directory path     | -v /path/to/androidLicenses:/usr/local/android-sdk-linux/licenses |
 | yes      | apk-signing material directory path | -v /some/path:/apk-signing                                        |
-
-## How to build signed apk file
-### requirements
-coming soon
-### usage
-coming soon
+| no       | gradle_deps directory path          | -v $(pwd)/../gradle_deps:/temp/gradle_deps                        |
 
 
 ## Testet with the following versions
@@ -56,3 +60,4 @@ coming soon
 ## Todo
 - integrate fastlane (optional)
   - https://github.com/appfoundry/fastlane-android-example
+- add a versioning script (so you ca adat the apk versionng)

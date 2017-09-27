@@ -69,6 +69,10 @@ RUN echo y | android update sdk \
 # SDK licenses agreements
 RUN mkdir "$ANDROID_HOME/licenses" || true
 
+# Tell gradle to store dependencies in a sub directory of the android project
+# this persists the dependencies between builds
+ENV GRADLE_USER_HOME /temp/gradle_deps
+
 # I'll commented the following lines for two reasons:
     # 1. I want that usere are awere that they have to aggree to licenses
     # 2. The licence texts and so the hash valus could change, so hardcoded is not the best option
