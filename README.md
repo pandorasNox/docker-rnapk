@@ -38,11 +38,11 @@ Before you can use this tool you have to create all needed docker images for tha
 
 > Be awere that creating these docker images automatically accepts all kinds of license agreements, it's by the way never a good idea to run any foreign scripts / creating docker images without checking whats happen in there
 
-Its recommended to use the provided init.sh file in this repository.
+Its recommended to execute the provided init.sh (in the root directory) file of this repository.
 
-`bash init.sh` or `./init.sh` after given execution rights to the file
+e.g. run: `bash init.sh`
 
-Running this commands creates three images
+Executing the init.sh script creates three images
 - android-tools
 - react-native-tools
 - react-native-build
@@ -50,11 +50,11 @@ Running this commands creates three images
 > the names of the images counts because react-native-build extends react-native-tools and this extends android-tools and
 
 Of course you can create each image manually by running:
-`docker build -t android-tools ./android-tools`
-`docker build -t react-native-tools ./react-native-tools`
-`docker build -t react-native-build ./react-native-build`
+- `docker build -t android-tools ./android-tools`
+- `docker build -t react-native-tools ./react-native-tools`
+- `docker build -t react-native-build ./react-native-build`
 
-### 
+### Preparing the keystore
 coming soon
 
 ## example usage
