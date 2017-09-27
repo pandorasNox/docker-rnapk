@@ -1,15 +1,30 @@
-# docker-rnapk
-docker react-native android application package building
+# About
+docker-rnapk = Docker React Native Android application package building
 
-docker run -it --rm --init react-native-build
+This project aims to provide you with a command line tool based on Docker to build signed APK files for Android.
+
+## Motivation
+
+
+## example usage
+`docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing -v $(pwd)/../android-licenses:/usr/local/android-sdk-linux/licenses react-native-build`
 
 ## container arguments
 
-| What                                | Argument/Example                                                  |
-|-------------------------------------|-------------------------------------------------------------------|
-| project directory path              | -v $(pwd):/temp                                                   |
-| android-lizenses directory path     | -v /path/to/androidLicenses:/usr/local/android-sdk-linux/licenses |
-| apk-signing material directory path | -v /some/path:/apk-signing                                        |
+| Required | What                                | Argument/Example                                                  |
+|----------|-------------------------------------|-------------------------------------------------------------------|
+| yes      | project directory path              | -v $(pwd):/temp                                                   |
+| yes      | android-licenses directory path     | -v /path/to/androidLicenses:/usr/local/android-sdk-linux/licenses |
+| yes      | apk-signing material directory path | -v /some/path:/apk-signing                                        |
 
-## example
-`docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing  react-native-build`
+## How to build signed apk file
+### requirements
+### usage
+
+## Testet with the following versions
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.45.1",
+
+## Todo
+- integrate fastlane (optional)
+  - https://github.com/appfoundry/fastlane-android-example

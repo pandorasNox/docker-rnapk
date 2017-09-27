@@ -53,7 +53,10 @@ RUN echo y | android update sdk \
     --no-ui \
     --force \
     --all \
-    --filter "${ANDROID_COMPONENTS}" 
+    --filter "${ANDROID_COMPONENTS}"
+
+#todo: try the following:
+#   (while sleep 3; do echo "y"; done) | $ANDROID_HOME/tools/android update sdk -u
 
 # install google components
 ENV GOOGLE_COMPONENTS extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services

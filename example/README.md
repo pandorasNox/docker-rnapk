@@ -1,0 +1,1 @@
+Soon I will provide here a React Native example project to show the usage of the docker-rnapk tool
