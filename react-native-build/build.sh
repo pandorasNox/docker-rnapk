@@ -77,7 +77,7 @@ echo ""
 
 #handle apk-versioning related tasks
 echo "handle apk-versioning"
-cp -Rf /build/overwrite/apk-versioning/android/. /temp/android/
+cp -Rf /build/overwrite/android/. /temp/android/
 echo ""
 
 #link native components
