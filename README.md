@@ -26,9 +26,10 @@ Here docker-rnapk joins the game.
 </details>
 
 ### Goals
+- create production ready _signed_ android apk files (this is the stuff you push to the app stores)
 - works for CRNA (Creat React Native App) projects in the first place
 - create reproducible results
-- reduced time to setup for new developers (well you need use and understand docker)
+- reduced time to setup for new developers (well you need to use and understand docker)
 - you shouldn't need to install Android Studio (or NDK’s) as well
 - be as flexible as possible (also support apps with native dependencies)
 - enable APK signing
@@ -61,6 +62,14 @@ Of course you can create each image manually by running (separately):
 - `docker build -t react-native-build ./react-native-build`
 
 ### Preparing the keystore
+In order to create a signed apk file we need a keystore file. A keystore file basiclly contains one or more keys.
+The contained key(s) are used to sign your apk files.
+
+_Note: For an app you want to upload to the google play store you always have to use the exact same key._
+
+Before you are going to create the keystore file think about proper names for the keystore file and the alias of the contained key.
+Also it's maybe a good idea to store the passwords you used to create the keystore file and the key on a secured place for yoo so you don't forget them.
+
 _Note: the following is basiclly an extract from the [React Native documentation #generating-a-signing-key](https://github.com/facebook/react-native/blob/d0260b4f35f74a77d7f0d80d1e1b03233b92e978/docs/SignedAPKAndroid.md)_
 
 <blockquote>
@@ -75,10 +84,34 @@ The keystore contains a single key, valid for 10000 days. The alias is a name th
 _Note: Remember to keep your keystore file private and never commit it to version control._
 </blockquote>
 
-As the las note said, store the keystore file outside of your React Native Project.
+As the last note said, store the keystore file outside of your React Native Project.
+
+For more information about apk signing [read the android developer document](https://developer.android.com/studio/publish/app-signing.html) about it.
+
+This projects docker-rnapk is doing the actuall signing for you, so you don't have to worry about this technical step but you have to provide a keystore file for that purpose.
+
+### Create and configure a gradle.properties file
+In order to tell the build script of the docker-rnapk container to use our keystore file and the containing key we have to expose the keystore filename, the right key alias and the password for the keystoore and the key.
+
+We doing this through an gradle.properties configuration file.
+
+`gradle.properties` file can look like:
+```
+    android.useDeprecatedNdk=true
+
+    DOCKER_RNAPK_RELEASE_STORE_FILE=my-release-key.keystore
+    DOCKER_RNAPK_RELEASE_KEY_ALIAS=my-key-alias
+    DOCKER_RNAPK_RELEASE_STORE_PASSWORD=*****
+    DOCKER_RNAPK_RELEASE_KEY_PASSWORD=*****
+```
+
+### other preperations
+- index.js (React Native >= 0.49.0) OR index.android.js (React Native < 0.49.0)
+- app.json
+    - has to contain "name" and "displayName" key/value pairs
 
 ## example usage
-`docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing -v $(pwd)/../android-licenses:/usr/local/android-sdk-linux/licenses react-native-build`
+`docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing react-native-build`
 
 ## How to build signed apk file
 ### requirements
@@ -108,3 +141,10 @@ coming soon
     - https://github.com/appfoundry/fastlane-android-example
 - add a versioning script (so you can overwrite the current apk versioning)
 - check this out for CI: https://medium.com/@tonespy/using-jenkins-pipeline-and-docker-for-android-continuous-integration-5fd39f8957a7
+- use rsync instead of compressing etc and also to avoid adaption on the mounted project
+- check the app.json
+- check for react-native version >= 0.49.0 for index.js vs index.ios.js and index.android.js
+- check for currupt android/ios folder (not neccessary with rsync? or if exist enable custom build?)
+- create dist folder where to find at the end the builded apk file
+- improve the keystore process, by providing a wrapper if you never had one bevore?
+- provide example app for testing purpose and just for example?
