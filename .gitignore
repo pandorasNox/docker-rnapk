@@ -1,4 +1,7 @@
 # showcase related ignores
-example/showcase/some-app/node_modules/
-example/showcase/some-app/.expo/
-example/showcase/some-app/npm-debug.*
+example/showcases/crna-based/some-crnapp/node_modules/
+example/showcases/crna-based/some-crnapp/android/
+example/showcases/crna-based/some-crnapp/ios/
+example/showcases/crna-based/some-crnapp/.expo/
+example/showcases/crna-based/some-crnapp/npm-debug.*
+example/showcases/crna-based/some-crnapp/yarn.lock

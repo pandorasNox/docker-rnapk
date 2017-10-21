@@ -38,7 +38,7 @@ Here docker-rnapk joins the game.
 
 ## Get started
 
-### build the docker images
+### 1. build the docker images
 Before you can use this tool you have to create all needed docker images for that purpose.
 
 > Be awere that creating these docker images automatically accepts all kinds of license agreements. It's by the way never a good idea to run any foreign scripts / creating docker images without checking whats happen in there.
@@ -61,7 +61,7 @@ Of course you can create each image manually by running (separately):
 - `docker build -t react-native-tools ./react-native-tools`
 - `docker build -t react-native-build ./react-native-build`
 
-### Preparing the keystore
+### 2. Preparing the keystore
 In order to create a signed apk file we need a keystore file. A keystore file basiclly contains one or more keys.
 The contained key(s) are used to sign your apk files.
 
@@ -90,7 +90,7 @@ For more information about apk signing [read the android developer document](htt
 
 This projects docker-rnapk is doing the actuall signing for you, so you don't have to worry about this technical step but you have to provide a keystore file for that purpose.
 
-### Create and configure a gradle.properties file
+### 3. Create and configure a gradle.properties file
 In order to tell the build script of the docker-rnapk container to use our keystore file and the containing key we have to expose the keystore filename, the right key alias and the password for the keystoore and the key.
 
 We doing this through an gradle.properties configuration file.
@@ -105,19 +105,57 @@ We doing this through an gradle.properties configuration file.
     DOCKER_RNAPK_RELEASE_KEY_PASSWORD=*****
 ```
 
-### other preperations
+### 4. Prepare the signing-material directory
+To propergate the the keystore file and the gradle.properties file to the docker-rnapk container we have to mount them. In order to do so you have to store them both in the same directory, in our example we call the directory "signing-material".
+
+Then you have maybe this structure:
+```
+    /MyAppDirectory
+       package.json
+       app.josn
+       ...
+    /signing-material
+        gradle.properties
+        my-release-key.keystore
+```
+
+### 5. check / prepare your app project
 - index.js (React Native >= 0.49.0) OR index.android.js (React Native < 0.49.0)
 - app.json
     - has to contain "name" and "displayName" key/value pairs [check out](https://github.com/facebook/react-native/blob/master/local-cli/eject/eject.js#L16) for the details
 
+### 6. build the apk file
+Before we finally build the apk file lets assume that your directory structure looks something like this:
+
+```
+    /MyAppDirectory
+       package.json
+       app.josn
+       ...
+    /signing-material
+        gradle.properties
+        my-release-key.keystore
+```
+
+Now we want to run the react-native-build image as container to build our apk file.
+In order to do so we have at least to mount the app project and the signing-material into the docker container.
+
+The final command should look something like that:
+
+    docker run -it --rm --init -v $(pwd)/MyAppDirectory:/temp -v $(pwd)/signing-material:/apk-signing react-native-build
+
+Now we have to wait until the container is done. Afterwards, bec. we used `--rm`, the container is automatically removed.
+
+### 7. Find the apk file
+The docker-rnapk projects created an android folder in you project directory where you can finde the signed apk file.
+
+Precise location should be:
+`/MyAppDirectory/android/app/build/outputs/apk`
+
+Done!
+
 ## example usage
 `docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing react-native-build`
-
-## How to build signed apk file
-### requirements
-coming soon
-### usage
-coming soon
 
 ## container arguments
 
@@ -127,12 +165,10 @@ coming soon
 | yes      | apk-signing material directory path | -v /some/path:/apk-signing                                        |
 | no       | gradle_deps directory path          | -v /some/path:/gradle_deps                                        |
 
-
 ## Testet with the following versions of React/React Native
 | React             | React Native         |
 |-------------------|----------------------|
 | "16.0.0-alpha.12" | "0.45.1"             |
-
 
 ## Todo
 - use docker volumn for handling node_modules
@@ -148,3 +184,5 @@ coming soon
 - create dist folder where to find at the end the builded apk file
 - improve the keystore process, by providing a wrapper if you never had one bevore?
 - provide example app for testing purpose and just for example?
+- rename the used container to docker-rnapk instead of react-native-build
+- do an external systemcheck for the docker container or something like that after each commit/deploy/new-version?

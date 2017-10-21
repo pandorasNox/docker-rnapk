@@ -8,3 +8,5 @@ coming soon
 some-crnapp
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.4"
+
+    docker run -it --rm -v $(pwd)/crna-based/some-crnapp/:/temp -v $(pwd)/signing-material:/apk-signing react-native-build
