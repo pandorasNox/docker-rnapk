@@ -1,0 +1,4 @@
+# showcase related ignores
+example/showcase/some-app/node_modules/
+example/showcase/some-app/.expo/
+example/showcase/some-app/npm-debug.*

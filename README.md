@@ -43,7 +43,7 @@ Before you can use this tool you have to create all needed docker images for tha
 
 > Be awere that creating these docker images automatically accepts all kinds of license agreements. It's by the way never a good idea to run any foreign scripts / creating docker images without checking whats happen in there.
 
-> Be awere that the combined size of the images takes more than 5GB of disk space.
+_Note: Be awere that the combined size of the images takes more than 5GB of disk space._
 
 Its recommended to execute the provided init.sh file (in the root directory of this repository) to ensure the naming of the images.
 
@@ -67,8 +67,8 @@ The contained key(s) are used to sign your apk files.
 
 _Note: For an app you want to upload to the google play store you always have to use the exact same key._
 
-Before you are going to create the keystore file think about proper names for the keystore file and the alias of the contained key.
-Also it's maybe a good idea to store the passwords you used to create the keystore file and the key on a secured place for yoo so you don't forget them.
+Before you are going to create the keystore file think about proper names for the keystore file and the alias of the contained key you want to use to sign the apk file.
+Also it's maybe a good idea to store the passwords you used to create the keystore file and the key on a secured place for you so you don't forget them.
 
 _Note: the following is basiclly an extract from the [React Native documentation #generating-a-signing-key](https://github.com/facebook/react-native/blob/d0260b4f35f74a77d7f0d80d1e1b03233b92e978/docs/SignedAPKAndroid.md)_
 
@@ -108,7 +108,7 @@ We doing this through an gradle.properties configuration file.
 ### other preperations
 - index.js (React Native >= 0.49.0) OR index.android.js (React Native < 0.49.0)
 - app.json
-    - has to contain "name" and "displayName" key/value pairs
+    - has to contain "name" and "displayName" key/value pairs [check out](https://github.com/facebook/react-native/blob/master/local-cli/eject/eject.js#L16) for the details
 
 ## example usage
 `docker run -it --rm --init -v $(pwd):/temp -v $(pwd)/../apk-signing:/apk-signing react-native-build`
