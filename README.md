@@ -120,9 +120,14 @@ Then you have maybe this structure:
 ```
 
 ### 5. check / prepare your app project
-- index.js (React Native >= 0.49.0) OR index.android.js (React Native < 0.49.0)
-- app.json
+In order to be deployable your app project directory needs:
+
+- an index.js file (React Native >= 0.49.0) OR index.android.js file (React Native < 0.49.0)
+    - index.android.js example [here](example/showcases/crna-based/some-crnapp/index.android.js)
+    - index.js example [coming soon]()
+- an app.json file
     - has to contain "name" and "displayName" key/value pairs [check out](https://github.com/facebook/react-native/blob/master/local-cli/eject/eject.js#L16) for the details
+    - app.json example [here](example/showcases/crna-based/some-crnapp/app.json)
 
 ### 6. build the apk file
 Before we finally build the apk file lets assume that your directory structure looks something like this:
@@ -147,7 +152,7 @@ The final command should look something like that:
 Now we have to wait until the container is done. Afterwards, bec. we used `--rm`, the container is automatically removed.
 
 ### 7. Find the apk file
-The docker-rnapk projects created an android folder in you project directory where you can finde the signed apk file.
+The docker-rnapk projects created an android folder in you project directory where you can find the signed apk file.
 
 Precise location should be:
 `/MyAppDirectory/android/app/build/outputs/apk`
