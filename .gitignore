@@ -5,3 +5,4 @@ example/showcases/crna-based/some-crnapp/ios/
 example/showcases/crna-based/some-crnapp/.expo/
 example/showcases/crna-based/some-crnapp/npm-debug.*
 example/showcases/crna-based/some-crnapp/yarn.lock
+example/showcases/crna-based/some-crnapp/docker-rnapk-dist/
