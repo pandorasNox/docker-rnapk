@@ -35,23 +35,39 @@ then
     exit
 fi
 
-#compress .node_modules folder & delete it, if exist
-if [[ -d "node_modules" && ! -L "node_modules" ]]; then
-    echo "start compressing original node_modules directory"
-    tar -zcf original_node_modules.tar.gz node_modules
-    rm -r node_modules
-    echo "end compressing original node_modules directory"
-    echo ""
-fi
+#rsync [OPTION]... /temp [SRC]... /temp-dist
+echo "sync project to temp-dist"
+rsync \
+-r \
+--exclude 'android' \
+--exclude 'ios' \
+--exclude 'node_modules' \
+--exclude 'yarn.lock' \
+--exclude 'package-lock.json' \
+--exclude 'npm-shrinkwrap.json' \
+/temp/ /temp-dist
+echo ""
+
+# go to copied project
+echo "cd to /temp-dist"
+cd /temp-dist
+echo ""
+
+echo "ls -al"
+ls -al
+echo ""
+
+echo "ls -al node_modules"
+ls -al node_modules
+echo ""
 
 # install/update node packages
-if [ ! -e rnapk_node_modules.tar.gz ]
-then
-    yarn install
-else
-    tar -zxf rnapk_node_modules.tar.gz
-    yarn install
-fi
+#todo: yarn vs npm
+#echo "yarn install"
+#yarn install
+#echo ""
+echo "npm install"
+npm install
 echo ""
 
 #
@@ -60,6 +76,7 @@ echo ""
 #
 
 #eject/generate android and ios project folders
+echo "react-native eject"
 react-native eject
 echo ""
 
@@ -77,28 +94,30 @@ echo ""
 
 #handle apk-versioning related tasks
 echo "handle apk-versioning"
-cp -Rf /build/overwrite/android/. /temp/android/
+cp -Rf /build/overwrite/android/. ./android/
 echo ""
 
 #link native components
 #todo: put this in an extra script
+echo "react-native link"
 react-native link
 echo ""
 
 #build
 echo "start build android production apk"
 cd android && ./gradlew assembleRelease
+cd ..
 echo "end build android production apk"
 echo ""
 
-#post-build-cleanup
-echo "start post-build-cleanup"
-tar -zcf rnapk_node_modules.tar.gz node_modules
-rm -r node_modules
-if [ -e original_node_modules.tar.gz ]
-then
-    tar -zxf original_node_modules.tar.gz
-    rm original_node_modules.tar.gz
-fi
-echo "end post-build-cleanup"
+#post-build-step
+echo "start post-build-step"
+echo ""
+echo "create docker-rnapk-dist"
+mkdir -p /temp/docker-rnapk-dist
+echo ""
+echo "copy build folder to /temp/docker-rnapk-dist"
+#todo: maybe use rsync
+cp -Rf ./android/app/build/outputs/ /temp/docker-rnapk-dist/
+echo "end post-build-step"
 echo ""

@@ -152,10 +152,10 @@ The final command should look something like that:
 Now we have to wait until the container is done. Afterwards, bec. we used `--rm`, the container is automatically removed.
 
 ### 7. Find the apk file
-The docker-rnapk projects created an android folder in you project directory where you can find the signed apk file.
+The docker-rnapk project creats a "docker-rnapk-dist" folder in you project directory where you can find the signed apk file.
 
 Precise location should be:
-`/MyAppDirectory/android/app/build/outputs/apk`
+`/MyAppDirectory/docker-rnapk-dist/outputs/apk`
 
 Done!
 
@@ -168,7 +168,10 @@ Done!
 |----------|-------------------------------------|-------------------------------------------------------------------|
 | yes      | project directory path              | -v $(pwd):/temp                                                   |
 | yes      | apk-signing material directory path | -v /some/path:/apk-signing                                        |
-| no       | gradle_deps directory path          | -v /some/path:/gradle_deps                                        |
+| no       | gradle_deps volume                  | -v drnapk_gradle_deps:/gradle_deps                                |
+| no       | node_modules volume                 | -v drnapk_node_modules:/temp-dist/node_modules                    |
+
+_Note: Using the gradle_deps volume and node_modules volume will persit this folder / packages into docker volumes over multiple builds. This will improve the build speed._
 
 ## Testet with the following versions of React/React Native
 | React             | React Native         |
@@ -182,12 +185,11 @@ Done!
     - https://github.com/appfoundry/fastlane-android-example
 - add a versioning script (so you can overwrite the current apk versioning)
 - check this out for CI: https://medium.com/@tonespy/using-jenkins-pipeline-and-docker-for-android-continuous-integration-5fd39f8957a7
-- use rsync instead of compressing etc and also to avoid adaption on the mounted project
 - check the app.json
 - check for react-native version >= 0.49.0 for index.js vs index.ios.js and index.android.js
 - check for currupt android/ios folder (not neccessary with rsync? or if exist enable custom build?)
-- create dist folder where to find at the end the builded apk file
 - improve the keystore process, by providing a wrapper if you never had one bevore?
 - provide example app for testing purpose and just for example?
 - rename the used container to docker-rnapk instead of react-native-build
 - do an external systemcheck for the docker container or something like that after each commit/deploy/new-version?
+- add script arguments/flags e.q. --from-scratch to enable differentiation between crna vs post-crna
